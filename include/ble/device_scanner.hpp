@@ -8,10 +8,10 @@
 
 class DeviceScanner : public QObject {
   Q_OBJECT
-public:
+ public:
   DeviceScanner();
   ~DeviceScanner();
-  void addDeviceNameFilter(const QString &name);
+  void addDeviceNameFilter(const QString& name);
   QList<QString> getDeviceNameFilters();
   void setMaximumDiscoveredDeviceCount(const size_t count);
   size_t getMaximumDiscoveredDeviceCount();
@@ -20,24 +20,24 @@ public:
   void scan();
   void stopScan();
 
-signals:
+ signals:
   void scanStarted();
-  void deviceFound(QBluetoothDeviceInfo *device);
+  void deviceFound(QBluetoothDeviceInfo* device);
   void scanComplete();
 
-private:
-  QBluetoothDeviceDiscoveryAgent *_discoveryAgent = nullptr;
-  QList<QBluetoothDeviceInfo *> _discoveredDevices;
+ private:
+  QBluetoothDeviceDiscoveryAgent* _discoveryAgent = nullptr;
+  QList<QBluetoothDeviceInfo*> _discoveredDevices;
   QList<QString> _deviceNameFilters;
   size_t _maximumDeviceCount;
   bool _storeUnnamedDevices;
 
-  bool _isDeviceUnnamed(const QString &name, const QBluetoothAddress &address);
-  bool _isDeviceNameListed(const QString &name);
+  bool _isDeviceUnnamed(const QString& name, const QBluetoothAddress& address);
+  bool _isDeviceNameListed(const QString& name);
 
-private slots:
+ private slots:
   void scanFinished();
-  void addDevice(const QBluetoothDeviceInfo &);
+  void addDevice(const QBluetoothDeviceInfo&);
 };
 
-#endif // __BLE_DEVICE_SCANNER_HPP
+#endif  // __BLE_DEVICE_SCANNER_HPP

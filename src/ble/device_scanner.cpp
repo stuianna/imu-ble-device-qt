@@ -15,8 +15,8 @@ DeviceScanner::~DeviceScanner() {
   delete _discoveryAgent;
 }
 
-void DeviceScanner::addDeviceNameFilter(const QString &name) {
-  if (!_deviceNameFilters.contains(name)) {
+void DeviceScanner::addDeviceNameFilter(const QString& name) {
+  if(!_deviceNameFilters.contains(name)) {
     _deviceNameFilters.append(name);
   }
 }
@@ -33,7 +33,9 @@ size_t DeviceScanner::getMaximumDiscoveredDeviceCount() {
   return _maximumDeviceCount;
 }
 
-bool DeviceScanner::getStoreUnnamedDevices() { return _storeUnnamedDevices; }
+bool DeviceScanner::getStoreUnnamedDevices() {
+  return _storeUnnamedDevices;
+}
 
 void DeviceScanner::setStoreUnnamedDevices(bool store) {
   _storeUnnamedDevices = store;
@@ -41,64 +43,60 @@ void DeviceScanner::setStoreUnnamedDevices(bool store) {
 
 void DeviceScanner::scan() {
   _discoveryAgent = new QBluetoothDeviceDiscoveryAgent();
-  QObject::connect(_discoveryAgent,
-                   &QBluetoothDeviceDiscoveryAgent::deviceDiscovered, this,
-                   &DeviceScanner::addDevice);
-  QObject::connect(_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::finished,
-                   this, &DeviceScanner::scanFinished);
-  QObject::connect(_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::canceled,
-                   this, &DeviceScanner::scanFinished);
+  QObject::connect(_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered, this, &DeviceScanner::addDevice);
+  QObject::connect(_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::finished, this, &DeviceScanner::scanFinished);
+  QObject::connect(_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::canceled, this, &DeviceScanner::scanFinished);
   qDebug() << "Device scan started.";
   emit scanStarted();
   _discoveredDevices.clear();
   _discoveryAgent->start();
 }
 
-void DeviceScanner::stopScan() { _discoveryAgent->stop(); }
+void DeviceScanner::stopScan() {
+  _discoveryAgent->stop();
+}
 
-bool DeviceScanner::_isDeviceUnnamed(const QString &name,
-                                     const QBluetoothAddress &address) {
+bool DeviceScanner::_isDeviceUnnamed(const QString& name, const QBluetoothAddress& address) {
   QString n = name;
   return (n.replace('-', ':') == address.toString());
 }
 
-bool DeviceScanner::_isDeviceNameListed(const QString &name) {
-  if (_deviceNameFilters.empty()) {
+bool DeviceScanner::_isDeviceNameListed(const QString& name) {
+  if(_deviceNameFilters.empty()) {
     return true;
   }
   return _deviceNameFilters.contains(name);
 }
 
-void DeviceScanner::addDevice(const QBluetoothDeviceInfo &info) {
-  qDebug() << "Found device: " << info.name() << " - "
-           << info.address().toString();
-  if (_isDeviceUnnamed(info.name(), info.address()) && !_storeUnnamedDevices) {
+void DeviceScanner::addDevice(const QBluetoothDeviceInfo& info) {
+  qDebug() << "Found device: " << info.name() << " - " << info.address().toString();
+  if(_isDeviceUnnamed(info.name(), info.address()) && !_storeUnnamedDevices) {
     return;
   }
 
-  if (!_isDeviceNameListed(info.name())) {
+  if(!_isDeviceNameListed(info.name())) {
     return;
   }
 
   auto newDevice = new QBluetoothDeviceInfo(info);
-  if (!_discoveredDevices.contains(newDevice)) {
-    qDebug() << "Found new matching device: " << info.name() << " - "
-             << info.address().toString();
+  if(!_discoveredDevices.contains(newDevice)) {
+    qDebug() << "Found new matching device: " << info.name() << " - " << info.address().toString();
     _discoveredDevices.append(newDevice);
-  } else {
+  }
+  else {
     delete newDevice;
   }
-  if (_discoveredDevices.length() == static_cast<int>(_maximumDeviceCount)) {
+  if(_discoveredDevices.length() == static_cast<int>(_maximumDeviceCount)) {
     stopScan();
   }
 }
 
 void DeviceScanner::scanFinished() {
   qDebug() << "Device scan finished.";
-  if (_discoveredDevices.isEmpty()) {
+  if(_discoveredDevices.isEmpty()) {
     emit scanComplete();
   }
-  for (auto device : qAsConst(_discoveredDevices)) {
+  for(auto device: qAsConst(_discoveredDevices)) {
     emit deviceFound(device);
   }
 }
