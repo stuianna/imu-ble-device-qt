@@ -17,12 +17,16 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick Bluetooth REQUIRED)
 set(PROJECT_SOURCES
         src/main.cpp
         src/ble/device_scanner.cpp
+        src/ble/imu_device.cpp
+        src/ble/notification_service.cpp
         qml/qml.qrc
 
         # https://github.com/bincrafters/community/issues/466#issuecomment-426265654
         # Header files that require QOBJECT should be added to the executable sources,
         # so that they are parsed by auto-moc. Otherwise a bunch of link-time errors occur.
         ${CMAKE_SOURCE_DIR}/include/ble/device_scanner.hpp
+        ${CMAKE_SOURCE_DIR}/include/ble/imu_device.hpp
+        ${CMAKE_SOURCE_DIR}/include/ble/notification_service.hpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
