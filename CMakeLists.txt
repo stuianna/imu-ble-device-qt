@@ -11,12 +11,18 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick Bluetooth REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick Bluetooth REQUIRED)
 
 set(PROJECT_SOURCES
         src/main.cpp
+        src/ble/device_scanner.cpp
         qml/qml.qrc
+
+        # https://github.com/bincrafters/community/issues/466#issuecomment-426265654
+        # Header files that require QOBJECT should be added to the executable sources,
+        # so that they are parsed by auto-moc. Otherwise a bunch of link-time errors occur.
+        ${CMAKE_SOURCE_DIR}/include/ble/device_scanner.hpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -45,7 +51,11 @@ endif()
 target_compile_definitions(imu-ble-app
   PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(imu-ble-app
-  PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick)
+  PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Bluetooth)
+
+target_include_directories(imu-ble-app PRIVATE
+    ${CMAKE_SOURCE_DIR}/include
+)
 
 set_target_properties(imu-ble-app PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
