@@ -1,0 +1,3 @@
+[submodule "imu-ble-device-shared"]
+	path = imu-ble-device-shared
+	url = git@github.com:stuianna/imu-ble-device-shared.git
