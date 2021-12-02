@@ -22,6 +22,7 @@ ImuDevice::ImuDevice(QBluetoothDeviceInfo* device) : _device(device) {
   });
   QObject::connect(_controller, &QLowEnergyController::disconnected, this, [this]() {
     Q_UNUSED(this);
+    qDebug() << "Device disconnected";
     emit disconnected();
   });
 }
@@ -32,7 +33,7 @@ ImuDevice::~ImuDevice() {
 }
 
 void ImuDevice::serviceDiscovered(const QBluetoothUuid& gatt) {
-  qDebug() << gatt.toString();
+  qDebug() << "Found service: " << gatt.toString();
   Q_UNUSED(gatt);
 }
 
@@ -62,6 +63,7 @@ void ImuDevice::serviceReady() {
   for(auto service: _services) {
     service->enableNotification(true);
   }
+  qDebug() << "Device connected";
   emit connected();
 }
 

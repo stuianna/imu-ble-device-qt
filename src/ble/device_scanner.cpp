@@ -93,10 +93,8 @@ void DeviceScanner::addDevice(const QBluetoothDeviceInfo& info) {
 
 void DeviceScanner::scanFinished() {
   qDebug() << "Device scan finished.";
-  if(_discoveredDevices.isEmpty()) {
-    emit scanComplete();
-  }
   for(auto device: qAsConst(_discoveredDevices)) {
     emit deviceFound(device);
   }
+  emit scanComplete();
 }
