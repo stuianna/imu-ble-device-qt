@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <ble/device_scanner.hpp>
+#include <constants/ble.hpp>
 #include <worker.hpp>
 
 int main(int argc, char* argv[]) {
@@ -21,7 +22,7 @@ int main(int argc, char* argv[]) {
   Qt::QueuedConnection);
   engine.load(url);
 
-  auto worker = new Worker("IMU Device");
+  auto worker = new Worker(BT_DEVICE_NAME);
   worker->start();
   return app.exec();
 }

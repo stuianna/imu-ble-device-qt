@@ -4,6 +4,7 @@
 #include <QDateTime>
 #include <QtEndian>
 #include <ble/imu_device.hpp>
+#include <constants/uuid.hpp>
 
 ImuDevice::ImuDevice(QBluetoothDeviceInfo* device) : _device(device) {
   _controller = QLowEnergyController::createCentral(*_device);
@@ -29,7 +30,6 @@ ImuDevice::ImuDevice(QBluetoothDeviceInfo* device) : _device(device) {
 
 ImuDevice::~ImuDevice() {
   delete _controller;
-  //    delete _hr_service;
 }
 
 void ImuDevice::serviceDiscovered(const QBluetoothUuid& gatt) {
@@ -38,12 +38,12 @@ void ImuDevice::serviceDiscovered(const QBluetoothUuid& gatt) {
 }
 
 void ImuDevice::serviceScanDone() {
-  _services[ACC] = new NotificationService(_controller, QBluetoothUuid(QString("{12345678-1234-5678-1234-56789abcdefA}")),
-                                           QBluetoothUuid(QString("{12345678-1234-5678-1234-56789abcdef1}")));
-  _services[GYR] = new NotificationService(_controller, QBluetoothUuid(QString("{12345678-1234-5678-1234-56789abcdee0}")),
-                                           QBluetoothUuid(QString("{12345678-1234-5678-1234-56789abcdef1}")));
-  _services[MAG] = new NotificationService(_controller, QBluetoothUuid(QString("12345678-1234-5678-1234-56789abcded0")),
-                                           QBluetoothUuid(QString("12345678-1234-5678-1234-56789abcdef1")));
+  _services[ACC] =
+  new NotificationService(_controller, QBluetoothUuid(QString(UUID_SERVICE_ACC)), QBluetoothUuid(QString(UUID_CHARACTERISTIC)));
+  _services[GYR] =
+  new NotificationService(_controller, QBluetoothUuid(QString(UUID_SERVICE_GYR)), QBluetoothUuid(QString(UUID_CHARACTERISTIC)));
+  _services[MAG] =
+  new NotificationService(_controller, QBluetoothUuid(QString(UUID_SERVICE_MAG)), QBluetoothUuid(QString(UUID_CHARACTERISTIC)));
   QObject::connect(_services[ACC], &NotificationService::ready, this, &ImuDevice::serviceReady);
   QObject::connect(_services[ACC], &NotificationService::dataAvailable, this, &ImuDevice::accelerometerDataAvailable);
   QObject::connect(_services[GYR], &NotificationService::ready, this, &ImuDevice::serviceReady);
