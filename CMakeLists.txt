@@ -16,6 +16,7 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick Bluetooth REQUIRED)
 
 set(PROJECT_SOURCES
         src/main.cpp
+        src/worker.cpp
         src/ble/device_scanner.cpp
         src/ble/imu_device.cpp
         src/ble/notification_service.cpp
@@ -27,6 +28,7 @@ set(PROJECT_SOURCES
         ${CMAKE_SOURCE_DIR}/include/ble/device_scanner.hpp
         ${CMAKE_SOURCE_DIR}/include/ble/imu_device.hpp
         ${CMAKE_SOURCE_DIR}/include/ble/notification_service.hpp
+        ${CMAKE_SOURCE_DIR}/include/worker.hpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

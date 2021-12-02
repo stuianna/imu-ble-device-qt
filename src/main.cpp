@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <ble/device_scanner.hpp>
+#include <worker.hpp>
 
 int main(int argc, char* argv[]) {
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -20,12 +21,7 @@ int main(int argc, char* argv[]) {
   Qt::QueuedConnection);
   engine.load(url);
 
-  auto scanner = new DeviceScanner();
-  scanner->addDeviceNameFilter("IMU Device");
-  scanner->setMaximumDiscoveredDeviceCount(1);
-  scanner->scan();
-  QObject::connect(scanner, &DeviceScanner::deviceFound, [](void) {});
-  QObject::connect(scanner, &DeviceScanner::scanComplete, [](void) {});
-
+  auto worker = new Worker("IMU Device");
+  worker->start();
   return app.exec();
 }
