@@ -74,3 +74,7 @@ if(QT_VERSION_MAJOR EQUAL 6)
     qt_import_qml_plugins(imu-ble-app)
     qt_finalize_executable(imu-ble-app)
 endif()
+
+add_custom_target(generate_models 
+    COMMAND balsam -o ${CMAKE_SOURCE_DIR}/qml ${CMAKE_SOURCE_DIR}/models/cube.fbx
+)

@@ -1,3 +1,6 @@
+#include <qmath.h>
+
+#include <QVector3D>
 #include <worker.hpp>
 
 Worker::Worker(const QString deviceName) : _deviceName(deviceName) {
@@ -42,6 +45,16 @@ void Worker::_disconnected() {
 
 void Worker::_accelerometer(float x, float y, float z) {
   emit accelAvailable(x, y, z);
+
+  static double roll = (atan2(y, z) * 57.3);
+  static double pitch = (atan2((-x), sqrt(y * y + z * z)) * 57.3);
+  double yaw = 0;
+
+  roll = (roll * 0.8) + (atan2(y, z) * 57.3) * 0.2;
+  pitch = (pitch * 0.8) + (atan2((-x), sqrt(y * y + z * z)) * 57.3) * 0.2;
+  qDebug() << roll;
+
+  emit basic_euler(QVector3D(-pitch, yaw, roll));
 }
 
 void Worker::_gyroscope(float x, float y, float z) {
