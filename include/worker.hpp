@@ -20,6 +20,9 @@ class Worker : public QObject {
   void gyroAvailable(float x, float y, float z);
   void magnoAvailable(float x, float y, float z);
 
+  // Temp signal to animate cube
+  void basic_euler(QVariant);
+
  private:
   const QString _deviceName;
   DeviceScanner* _scanner;
