@@ -44,12 +44,16 @@ void ImuDevice::serviceScanDone() {
   new NotificationService(_controller, QBluetoothUuid(QString(UUID_SERVICE_GYR)), QBluetoothUuid(QString(UUID_CHARACTERISTIC)));
   _services[MAG] =
   new NotificationService(_controller, QBluetoothUuid(QString(UUID_SERVICE_MAG)), QBluetoothUuid(QString(UUID_CHARACTERISTIC)));
+  _services[EULER] =
+  new NotificationService(_controller, QBluetoothUuid(QString(UUID_SERVICE_ORIENTATION)), QBluetoothUuid(QString(UUID_CHARACTERISTIC)));
   QObject::connect(_services[ACC], &NotificationService::ready, this, &ImuDevice::serviceReady);
   QObject::connect(_services[ACC], &NotificationService::dataAvailable, this, &ImuDevice::accelerometerDataAvailable);
   QObject::connect(_services[GYR], &NotificationService::ready, this, &ImuDevice::serviceReady);
   QObject::connect(_services[GYR], &NotificationService::dataAvailable, this, &ImuDevice::gyroscopeDataAvailable);
   QObject::connect(_services[MAG], &NotificationService::ready, this, &ImuDevice::serviceReady);
   QObject::connect(_services[MAG], &NotificationService::dataAvailable, this, &ImuDevice::magnometerDataAvailable);
+  QObject::connect(_services[EULER], &NotificationService::ready, this, &ImuDevice::serviceReady);
+  QObject::connect(_services[EULER], &NotificationService::dataAvailable, this, &ImuDevice::eulerDataAvailable);
   _serviceScanIndex = 0;
   _services[_serviceScanIndex]->scan();
 }
@@ -80,6 +84,11 @@ void ImuDevice::gyroscopeDataAvailable(const QByteArray& data) {
 void ImuDevice::magnometerDataAvailable(const QByteArray& data) {
   auto readings = reinterpret_cast<const float*>(data.constData());
   emit magnometer(readings[0], readings[1], readings[2]);
+}
+
+void ImuDevice::eulerDataAvailable(const QByteArray& data) {
+  auto readings = reinterpret_cast<const float*>(data.constData());
+  emit euler(readings[0], readings[1], readings[2]);
 }
 
 void ImuDevice::connect() {

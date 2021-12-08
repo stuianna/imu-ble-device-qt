@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
 
   QObject *rootObject = engine.rootObjects().at(0);
   QObject *cube = rootObject->findChild<QObject*>("cube");
-  QObject::connect(worker, SIGNAL(basic_euler(QVariant)), cube, SLOT(update_model(QVariant)));
+  QObject::connect(worker, SIGNAL(eulerAvailable(QVariant)), cube, SLOT(update_model(QVariant)));
 
   worker->start();
   return app.exec();

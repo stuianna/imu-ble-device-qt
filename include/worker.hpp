@@ -19,9 +19,7 @@ class Worker : public QObject {
   void accelAvailable(float x, float y, float z);
   void gyroAvailable(float x, float y, float z);
   void magnoAvailable(float x, float y, float z);
-
-  // Temp signal to animate cube
-  void basic_euler(QVariant);
+  void eulerAvailable(QVariant);
 
  private:
   const QString _deviceName;
@@ -35,6 +33,7 @@ class Worker : public QObject {
   void _accelerometer(float x, float y, float z);
   void _gyroscope(float x, float y, float z);
   void _magnometer(float x, float y, float z);
+  void _euler(float x, float y, float z);
 };
 
 #endif  // __WORKER_HPP
