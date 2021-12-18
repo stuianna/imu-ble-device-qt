@@ -57,5 +57,5 @@ void Worker::_magnometer(float x, float y, float z) {
 }
 
 void Worker::_euler(float x, float y, float z) {
-  emit eulerAvailable(QVector3D(y, z, x));
+  emit eulerAvailable(QVector3D(-y, z, -x));
 }

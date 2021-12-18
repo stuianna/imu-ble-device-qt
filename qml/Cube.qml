@@ -37,8 +37,8 @@ Node {
         source: "meshes/cube.mesh"
 
         DefaultMaterial {
-            id: vlue_material
-            diffuseColor: "#ff0002cc"
+            id: cyan_material
+            diffuseColor: "#ff01ccb5"
         }
 
         DefaultMaterial {
@@ -47,30 +47,12 @@ Node {
         }
 
         DefaultMaterial {
-            id: cyan_material
-            diffuseColor: "#ff01ccb5"
-        }
-
-        DefaultMaterial {
-            id: purple_material
-            diffuseColor: "#ffcc0098"
-        }
-
-        DefaultMaterial {
-            id: green_material
-            diffuseColor: "#ff05cc00"
-        }
-
-        DefaultMaterial {
             id: yellow_material
             diffuseColor: "#ffe6ae00"
         }
         materials: [
-            vlue_material,
-            red_material,
             cyan_material,
-            purple_material,
-            green_material,
+            red_material,
             yellow_material
         ]
     }

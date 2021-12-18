@@ -17,12 +17,12 @@ Window {
 
         PerspectiveCamera {
             id: camera
-            position: Qt.vector3d(0, 200, 300)
-            eulerRotation.x: -30
+            position: Qt.vector3d(0, 0, 400)
+            eulerRotation.x: 0 
         }
 
         DirectionalLight {
-            eulerRotation.x: -30
+            eulerRotation.x: 0
         }
 
         Cube {
