@@ -29,6 +29,12 @@ ImuDevice::ImuDevice(QBluetoothDeviceInfo* device) : _device(device) {
 }
 
 ImuDevice::~ImuDevice() {
+  for(auto service: _services) {
+    if(service) {
+      delete service;
+    }
+  }
+  delete _device;
   delete _controller;
 }
 

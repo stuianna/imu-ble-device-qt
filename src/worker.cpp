@@ -1,12 +1,14 @@
 #include <qmath.h>
+#include <qthread.h>
 
 #include <QVector3D>
 #include <worker.hpp>
 
-Worker::Worker(const QString deviceName) : _deviceName(deviceName) {
+Worker::Worker(const QString deviceName) : _deviceName(deviceName), _scanner(nullptr) {
 }
 
 Worker::~Worker() {
+  delete _device;
   delete _scanner;
 }
 
@@ -16,8 +18,7 @@ void Worker::start() {
   _scanner->setMaximumDiscoveredDeviceCount(1);
   connect(_scanner, &DeviceScanner::scanComplete, this, &Worker::_deviceScanComplete);
   connect(_scanner, &DeviceScanner::deviceFound, this, &Worker::_deviceFound);
-  emit deviceScanStarted();
-  _scanner->scan();
+  _startScan();
 }
 
 void Worker::_deviceScanComplete() {
@@ -41,8 +42,13 @@ void Worker::_connected() {
 
 void Worker::_disconnected() {
   emit deviceDisconnected();
+  _startScan();
 }
 
+void Worker::_startScan() {
+  emit deviceScanStarted();
+  _scanner->scan();
+}
 
 void Worker::_accelerometer(float x, float y, float z) {
   emit accelAvailable(x, y, z);

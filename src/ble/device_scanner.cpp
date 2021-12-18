@@ -11,7 +11,6 @@ DeviceScanner::DeviceScanner() {
 }
 
 DeviceScanner::~DeviceScanner() {
-  _discoveryAgent->stop();
   delete _discoveryAgent;
 }
 
@@ -46,6 +45,7 @@ void DeviceScanner::scan() {
   QObject::connect(_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered, this, &DeviceScanner::addDevice);
   QObject::connect(_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::finished, this, &DeviceScanner::scanFinished);
   QObject::connect(_discoveryAgent, &QBluetoothDeviceDiscoveryAgent::canceled, this, &DeviceScanner::scanFinished);
+  connect(_discoveryAgent, SIGNAL(error(QBluetoothDeviceDiscoveryAgent::Error)), this, SLOT(error(QBluetoothDeviceDiscoveryAgent::Error)));
   qDebug() << "Device scan started.";
   emit scanStarted();
   _discoveredDevices.clear();
@@ -97,4 +97,15 @@ void DeviceScanner::scanFinished() {
     emit deviceFound(device);
   }
   emit scanComplete();
+}
+
+void DeviceScanner::scanCancelled() {
+  qDebug() << "Scan cancelled";
+}
+
+void DeviceScanner::error(QBluetoothDeviceDiscoveryAgent::Error error) {
+  if(error == QBluetoothDeviceDiscoveryAgent::Error::InputOutputError) {
+    // Retry scanning, in case the first attempt fails.
+    scan();
+  }
 }

@@ -37,7 +37,9 @@ class DeviceScanner : public QObject {
 
  private slots:
   void scanFinished();
+  void scanCancelled();
   void addDevice(const QBluetoothDeviceInfo&);
+  void error(QBluetoothDeviceDiscoveryAgent::Error error);
 };
 
 #endif  // __BLE_DEVICE_SCANNER_HPP

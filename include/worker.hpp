@@ -25,6 +25,8 @@ class Worker : public QObject {
   const QString _deviceName;
   DeviceScanner* _scanner;
   ImuDevice* _device;
+  void _startScan();
+
  private slots:
   void _deviceScanComplete();
   void _deviceFound(QBluetoothDeviceInfo* device);
