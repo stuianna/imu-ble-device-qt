@@ -20,6 +20,7 @@ class ImuDevice : public QObject {
   void gyroscope(float x, float y, float z);
   void magnometer(float x, float y, float z);
   void euler(float x, float y, float z);
+  void quarternions(float w, float x, float y, float z);
 
  private:
   enum Services {
@@ -27,6 +28,7 @@ class ImuDevice : public QObject {
     GYR,
     MAG,
     EULER,
+    QUART,
     COUNT,
   };
   static_assert(ACC == 0, "Accelerometer seervice is expected to have index 0");
@@ -43,6 +45,7 @@ class ImuDevice : public QObject {
   void gyroscopeDataAvailable(const QByteArray& data);
   void magnometerDataAvailable(const QByteArray& data);
   void eulerDataAvailable(const QByteArray& data);
+  void quarternionDataAvailable(const QByteArray& data);
 };
 
 #endif  // __BLE_IMU_DEVICE_HPP

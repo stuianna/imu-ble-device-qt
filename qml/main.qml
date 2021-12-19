@@ -1,14 +1,14 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
-import QtQuick.Layouts 1.0
-import QtQuick.Controls 1.0
+import QtQuick.Layouts 1.1
+import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.0
 import QtQuick3D 1.15
 
 Window {
     id: mainview
-    width: 640
-    height: 480
+    width: 800
+    height: 600
     visible: true
     color: "black"
     title: qsTr("IMU-BLE")
@@ -40,6 +40,10 @@ Window {
             euler_x.text = "X:"
             euler_y.text = "Y:"
             euler_z.text = "Z:"
+            quarter_w.text = "W:"
+            quarter_y.text = "X:"
+            quarter_x.text = "Y:"
+            quarter_z.text = "Z:"
         }
 
         function scanning() {
@@ -224,6 +228,55 @@ Window {
                 }
             }
         }
+
+        GroupBox {
+            objectName: "quarternion"
+            flat: true
+            Layout.fillWidth: true
+            function quarternion_update(vec) {
+                quarter_x.text = "X: " + Number(vec.x.toFixed(3))
+                quarter_y.text = "Y: " + Number(vec.y.toFixed(3))
+                quarter_z.text = "Z: " + Number(vec.z.toFixed(3))
+                quarter_w.text = "W: " + Number(vec.scalar.toFixed(3))
+            }
+            Column {
+                spacing: 2
+                Label {
+                    font.pointSize: fontSize
+                    font.bold: true
+                    text: "Quarternion Orientation"
+                }
+
+                Label {
+                    objectName: "quarter_x"
+                    id: quarter_x
+                    font.pointSize: fontSize
+                    text: "X:"
+                }
+
+                Label {
+                    objectName: "quarter_y"
+                    id: quarter_y
+                    font.pointSize: fontSize
+                    text: "Y:"
+                }
+
+                Label {
+                    objectName: "quarter_z"
+                    id: quarter_z
+                    font.pointSize: fontSize
+                    text: "Z:"
+                }
+
+                Label {
+                    objectName: "quarter_w"
+                    id: quarter_w
+                    font.pointSize: fontSize
+                    text: "W:"
+                }
+            }
+        }
+
         Item {
             // spacer item
             Layout.fillWidth: true
@@ -266,8 +319,8 @@ Window {
             id: cube
             visible: true
             position: Qt.vector3d(0, 0, 0)
-            function update_model(newEuler) {
-                eulerRotation = newEuler
+            function update_model(newQuarternion) {
+                rotation = newQuarternion
             }
 
             scale.x: 1

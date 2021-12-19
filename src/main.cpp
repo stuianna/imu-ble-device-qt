@@ -32,16 +32,18 @@ int main(int argc, char* argv[]) {
   QObject* gyro = rootObject->findChild<QObject*>("gyro");
   QObject* mag = rootObject->findChild<QObject*>("mag");
   QObject* euler = rootObject->findChild<QObject*>("euler");
+  QObject* quarternion = rootObject->findChild<QObject*>("quarternion");
   QObject::connect(worker, SIGNAL(deviceConnected()), view3d, SLOT(connected()));
   QObject::connect(worker, SIGNAL(deviceDisconnected()), view3d, SLOT(disconnected()));
   QObject::connect(worker, SIGNAL(deviceConnected()), dataview, SLOT(connected()));
   QObject::connect(worker, SIGNAL(deviceDisconnected()), dataview, SLOT(disconnected()));
   QObject::connect(worker, SIGNAL(deviceScanStarted()), dataview, SLOT(scanning()));
-  QObject::connect(worker, SIGNAL(eulerAvailable(QVariant)), cube, SLOT(update_model(QVariant)));
+  QObject::connect(worker, SIGNAL(quarternionsAvailable(QVariant)), cube, SLOT(update_model(QVariant)));
   QObject::connect(worker, SIGNAL(accelAvailable(QVariant, QVariant, QVariant)), accel, SLOT(accel_update(QVariant, QVariant, QVariant)));
   QObject::connect(worker, SIGNAL(gyroAvailable(QVariant, QVariant, QVariant)), gyro, SLOT(gyro_update(QVariant, QVariant, QVariant)));
   QObject::connect(worker, SIGNAL(magnoAvailable(QVariant, QVariant, QVariant)), mag, SLOT(mag_update(QVariant, QVariant, QVariant)));
   QObject::connect(worker, SIGNAL(eulerAvailable(QVariant)), euler, SLOT(euler_update(QVariant)));
+  QObject::connect(worker, SIGNAL(quarternionsAvailable(QVariant)), quarternion, SLOT(quarternion_update(QVariant)));
 
   worker->start();
   return app.exec();

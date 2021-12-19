@@ -1,7 +1,6 @@
 #include <qmath.h>
 #include <qthread.h>
 
-#include <QVector3D>
 #include <containers/angle.hpp>
 #include <worker.hpp>
 
@@ -34,6 +33,7 @@ void Worker::_deviceFound(QBluetoothDeviceInfo* device) {
   connect(_device, &ImuDevice::gyroscope, this, &Worker::_gyroscope);
   connect(_device, &ImuDevice::magnometer, this, &Worker::_magnometer);
   connect(_device, &ImuDevice::euler, this, &Worker::_euler);
+  connect(_device, &ImuDevice::quarternions, this, &Worker::_quarternions);
   _device->connect();
 }
 
@@ -65,4 +65,8 @@ void Worker::_magnometer(float x, float y, float z) {
 
 void Worker::_euler(float x, float y, float z) {
   emit eulerAvailable(QVector3D(-y, z, -x));
+}
+
+void Worker::_quarternions(float w, float x, float y, float z) {
+  emit quarternionsAvailable(QQuaternion(w, -y, z, -x));
 }

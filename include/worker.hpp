@@ -3,6 +3,7 @@
 
 #include <ble/device_scanner.hpp>
 #include <ble/imu_device.hpp>
+#include <QQuaternion>
 
 class Worker : public QObject {
   Q_OBJECT
@@ -20,6 +21,7 @@ class Worker : public QObject {
   void gyroAvailable(QVariant x, QVariant y, QVariant z);
   void magnoAvailable(QVariant x, QVariant y, QVariant z);
   void eulerAvailable(QVariant);
+  void quarternionsAvailable(QVariant);
 
  private:
   const QString _deviceName;
@@ -36,6 +38,7 @@ class Worker : public QObject {
   void _gyroscope(float x, float y, float z);
   void _magnometer(float x, float y, float z);
   void _euler(float x, float y, float z);
+  void _quarternions(float w, float x, float y, float z);
 };
 
 #endif  // __WORKER_HPP
