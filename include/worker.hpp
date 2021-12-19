@@ -16,9 +16,9 @@ class Worker : public QObject {
   void deviceScanComplete();
   void deviceConnected();
   void deviceDisconnected();
-  void accelAvailable(float x, float y, float z);
-  void gyroAvailable(float x, float y, float z);
-  void magnoAvailable(float x, float y, float z);
+  void accelAvailable(QVariant x, QVariant y, QVariant z);
+  void gyroAvailable(QVariant x, QVariant y, QVariant z);
+  void magnoAvailable(QVariant x, QVariant y, QVariant z);
   void eulerAvailable(QVariant);
 
  private:

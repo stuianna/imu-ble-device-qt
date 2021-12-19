@@ -2,6 +2,7 @@
 #include <qthread.h>
 
 #include <QVector3D>
+#include <containers/angle.hpp>
 #include <worker.hpp>
 
 Worker::Worker(const QString deviceName) : _deviceName(deviceName), _scanner(nullptr) {
@@ -55,7 +56,7 @@ void Worker::_accelerometer(float x, float y, float z) {
 }
 
 void Worker::_gyroscope(float x, float y, float z) {
-  emit gyroAvailable(x, y, z);
+  emit gyroAvailable(Angle::radians(x).degrees(), Angle::radians(y).degrees(), Angle::radians(z).degrees());
 }
 
 void Worker::_magnometer(float x, float y, float z) {
