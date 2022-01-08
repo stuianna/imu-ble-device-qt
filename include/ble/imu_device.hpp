@@ -24,14 +24,10 @@ class ImuDevice : public QObject {
 
  private:
   enum Services {
-    ACC,
-    GYR,
-    MAG,
-    EULER,
-    QUART,
+    SYS_STATE,
     COUNT,
   };
-  static_assert(ACC == 0, "Accelerometer seervice is expected to have index 0");
+  static_assert(SYS_STATE == 0, "Accelerometer seervice is expected to have index 0");
   QBluetoothDeviceInfo* _device = nullptr;
   QLowEnergyController* _controller = nullptr;
   NotificationService* _services[Services::COUNT];
@@ -41,11 +37,7 @@ class ImuDevice : public QObject {
   void serviceDiscovered(const QBluetoothUuid& gatt);
   void serviceScanDone();
   void serviceReady();
-  void accelerometerDataAvailable(const QByteArray& data);
-  void gyroscopeDataAvailable(const QByteArray& data);
-  void magnometerDataAvailable(const QByteArray& data);
-  void eulerDataAvailable(const QByteArray& data);
-  void quarternionDataAvailable(const QByteArray& data);
+  void sysStateDataAvailable(const QByteArray& data);
 };
 
 #endif  // __BLE_IMU_DEVICE_HPP

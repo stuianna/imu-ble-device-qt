@@ -44,26 +44,10 @@ void ImuDevice::serviceDiscovered(const QBluetoothUuid& gatt) {
 }
 
 void ImuDevice::serviceScanDone() {
-  _services[ACC] =
+  _services[SYS_STATE] =
   new NotificationService(_controller, QBluetoothUuid(QString(UUID_SERVICE_ACC)), QBluetoothUuid(QString(UUID_CHARACTERISTIC)));
-  _services[GYR] =
-  new NotificationService(_controller, QBluetoothUuid(QString(UUID_SERVICE_GYR)), QBluetoothUuid(QString(UUID_CHARACTERISTIC)));
-  _services[MAG] =
-  new NotificationService(_controller, QBluetoothUuid(QString(UUID_SERVICE_MAG)), QBluetoothUuid(QString(UUID_CHARACTERISTIC)));
-  _services[EULER] =
-  new NotificationService(_controller, QBluetoothUuid(QString(UUID_SERVICE_EULER)), QBluetoothUuid(QString(UUID_CHARACTERISTIC)));
-  _services[QUART] =
-  new NotificationService(_controller, QBluetoothUuid(QString(UUID_SERVICE_QUARTERNION)), QBluetoothUuid(QString(UUID_CHARACTERISTIC)));
-  QObject::connect(_services[ACC], &NotificationService::ready, this, &ImuDevice::serviceReady);
-  QObject::connect(_services[ACC], &NotificationService::dataAvailable, this, &ImuDevice::accelerometerDataAvailable);
-  QObject::connect(_services[GYR], &NotificationService::ready, this, &ImuDevice::serviceReady);
-  QObject::connect(_services[GYR], &NotificationService::dataAvailable, this, &ImuDevice::gyroscopeDataAvailable);
-  QObject::connect(_services[MAG], &NotificationService::ready, this, &ImuDevice::serviceReady);
-  QObject::connect(_services[MAG], &NotificationService::dataAvailable, this, &ImuDevice::magnometerDataAvailable);
-  QObject::connect(_services[EULER], &NotificationService::ready, this, &ImuDevice::serviceReady);
-  QObject::connect(_services[EULER], &NotificationService::dataAvailable, this, &ImuDevice::eulerDataAvailable);
-  QObject::connect(_services[QUART], &NotificationService::ready, this, &ImuDevice::serviceReady);
-  QObject::connect(_services[QUART], &NotificationService::dataAvailable, this, &ImuDevice::quarternionDataAvailable);
+  QObject::connect(_services[SYS_STATE], &NotificationService::ready, this, &ImuDevice::serviceReady);
+  QObject::connect(_services[SYS_STATE], &NotificationService::dataAvailable, this, &ImuDevice::sysStateDataAvailable);
   _serviceScanIndex = 0;
   _services[_serviceScanIndex]->scan();
 }
@@ -81,29 +65,13 @@ void ImuDevice::serviceReady() {
   emit connected();
 }
 
-void ImuDevice::accelerometerDataAvailable(const QByteArray& data) {
+void ImuDevice::sysStateDataAvailable(const QByteArray& data) {
   auto readings = reinterpret_cast<const float*>(data.constData());
   emit accelerometer(readings[0], readings[1], readings[2]);
-}
-
-void ImuDevice::gyroscopeDataAvailable(const QByteArray& data) {
-  auto readings = reinterpret_cast<const float*>(data.constData());
-  emit gyroscope(readings[0], readings[1], readings[2]);
-}
-
-void ImuDevice::magnometerDataAvailable(const QByteArray& data) {
-  auto readings = reinterpret_cast<const float*>(data.constData());
-  emit magnometer(readings[0], readings[1], readings[2]);
-}
-
-void ImuDevice::eulerDataAvailable(const QByteArray& data) {
-  auto readings = reinterpret_cast<const float*>(data.constData());
-  emit euler(readings[0], readings[1], readings[2]);
-}
-
-void ImuDevice::quarternionDataAvailable(const QByteArray& data) {
-  auto readings = reinterpret_cast<const float*>(data.constData());
-  emit quarternions(readings[0], readings[1], readings[2], readings[3]);
+  emit gyroscope(readings[3], readings[4], readings[5]);
+  emit magnometer(readings[6], readings[7], readings[8]);
+  emit euler(readings[9], readings[10], readings[11]);
+  emit quarternions(readings[12], readings[13], readings[14], readings[15]);
 }
 
 void ImuDevice::connect() {
